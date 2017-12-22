@@ -35,7 +35,8 @@ $ npm install vt-datagrid --save
 *   `selectionChange` 当用复选框时，选择一行时触发的事件
 
 ### Setting
- ```全局配置
+ - 全局配置
+ ```
     {
       post: noop, //ajax post请求方法
       get: noop,  //ajax get请求方法
@@ -49,7 +50,7 @@ $ npm install vt-datagrid --save
     }
   ```
   
- 使用$set静态方法来设置项目中的全局设置。例如：
+ - 使用$set静态方法来设置项目中的全局设置。例如：
  ```
     improt {get,post} from 'apis/utils/index'
     
