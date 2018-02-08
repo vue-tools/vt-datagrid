@@ -1,14 +1,50 @@
 <style scoped>
     .vt-dg__warp{
-        background: red;
+        border: 1px solid #DEDEDE;
+        border-top:0;
+        min-height: 200px;
+        position: relative;
+        padding-bottom: 32px;
+        box-sizing: border-box;
+    }
+    .vt-dg__table{
+        height: 100%;
+    }
+    .vt-dg__pager{
+        width: 100%;
+        display: block;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+    }
+</style>
+<style>
+    .vt-dg__pager .ui-pagination--total{
+        margin: 0 5px;
+        line-height: 28px;
+    }
+    .vt-dg__pager select.ui-counter{
+        height: 28px;
+        margin: 0 5px;
+        border: 1px solid #dedede;
+        padding:0 5px;
+        box-sizing: border-box;
+    }
+    .vt-dg__pager .ui-button{
+        margin: 0 5px;
+    }
+    .vt-dg__pager .ui-pager{
+        position: relative;
+        top: 1px;
     }
 </style>
 <template>
-    <div :style="{height:vo.height}" class="vt-dg__warp">
-        <Tables :data="vo.rows" @selection-change="selectionChange" :selection="selection">
+    <div  class="vt-dg__warp">
+        <Tables class="vt-dg__table" :data="vo.rows" @selection-change="selectionChange" :selection="selection">
             <slot></slot>
         </Tables>
-        <Pagination :total="vo.pagination.total" :count="po.pageSize" :currentPage="po.pageNumber"
+
+        <Pagination class="vt-dg__pager" :total="vo.pagination.total" :count="po.pageSize" :currentPage="po.pageNumber"
                     :countOptions="vo.pagination.countOptions" @current-change="pageChange"
                     @count-change="pageSizeChange">
         </Pagination>
@@ -34,12 +70,8 @@
             options[k] = values[k]
         }
     }
-    let dgList = []
-    window.addEventListener("resize", function () {
-        for (let dg of dgList) {
-            dg.resize()
-        }
-    })
+    //    let dgList = []
+
 
     export default {
         data(){
@@ -87,11 +119,7 @@
             selectionChange(data){
                 this.$emit("selectionChange", data)
             },
-            resize(){
-                let top = document.documentElement.scrollTop
-                let h = this.$el.getBoundingClientRect().top
-                this.vo.height = window.document.documentElement.clientHeight - h - 50
-            },
+
             pageChange(page){
                 if (page !== this.po.pageNumber) {
                     this.po.pageNumber = page
@@ -118,18 +146,24 @@
                         this.vo.rows = data.rows
                         this.vo.pagination.total = data.total
                     } else {
-                        this.vo.data = res
+                        this.vo.rows = res
                     }
                 }).catch(err=> {
+                    this.vo.rows=[]
                     this.vo.loading = false
                 })
             },
         },
+        created() { //把组件所在页面的数据复制到当前页面
+            for(let prop in this.$parent) {
+                if(!this.hasOwnProperty(prop)) {
+                    console.info(prop)
+                    this[prop] = this.$parent[prop]
+                }
+            }
+        },
         mounted: function () {
-            dgList.push(this)
-            this.$nextTick(()=> {
-                this.resize()
-            })
+//            dgList.push(this)
         },
         components: {
 
@@ -137,6 +171,7 @@
         watch: {
             'pageNumber': function (val) {
                 this.po.pageNumber = val
+                console.info("cccc")
             },
             'pageSize': function (val) {
                 this.po.pageSize = val
