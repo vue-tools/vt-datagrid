@@ -157,7 +157,6 @@
         created() { //把组件所在页面的数据复制到当前页面
             for(let prop in this.$parent) {
                 if(!this.hasOwnProperty(prop)) {
-                    console.info(prop)
                     this[prop] = this.$parent[prop]
                 }
             }

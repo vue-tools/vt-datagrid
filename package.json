@@ -1,6 +1,6 @@
 {
   "name": "vt-datagrid",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "vue-datagrid",
   "main": "dist/index.vue",
   "devDependencies": {
